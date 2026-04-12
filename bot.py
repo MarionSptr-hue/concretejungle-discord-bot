@@ -28,9 +28,19 @@ for topic in topics:
         continue
 
     try:
-        title = topic.select_one(".topictitle").text.strip()
-        link = "https://concretejungle.forumactif.com" + topic.select_one(".topictitle")["href"]
-        author = topic.select_one(".lastpost strong a").text.strip()
+        title_elem = topic.select_one(".topictitle")
+
+        if not title_elem:
+            continue
+
+        link = "https://concretejungle.forumactif.com" + title_elem["href"]
+
+        author_elem = topic.select_one(".lastpost strong a")
+
+        if author_elem:
+            author = author_elem.text.strip()
+        else:
+            author = "Nouveau membre"
 
         if link not in posted:
             new_posts.append({
@@ -42,12 +52,11 @@ for topic in topics:
         continue
 
 
-new_posts.reverse()
-
-for post in new_posts:
+# On envoie toutes les nouvelles fiches
+for post in reversed(new_posts):
 
     data = {
-        "content": f"📢 @everyone\n\nUn nouveau visage apparaît dans les rues de Londres...\n\n👤 {post['author']}\n\nVenez lui souhaiter la bienvenue :\n{post['link']}"
+        "content": f"📢 @everyone\n\nUn nouveau visage apparaît dans la jungle...\n\n👤 {post['author']}\n\nVenez lui souhaiter la bienvenue :\n{post['link']}"
     }
 
     requests.post(WEBHOOK, json=data)
@@ -55,8 +64,6 @@ for post in new_posts:
     posted.append(post["link"])
 
 
+# On sauvegarde l'historique
 with open("posted.json", "w") as f:
     json.dump(posted, f)
-
-    with open("last_post.txt", "w") as f:
-        f.write(link)
