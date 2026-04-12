@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import json
- 
+
 WEBHOOK = os.getenv("DISCORD_WEBHOOK")
 
 url = "https://concretejungle.forumactif.com/f11-roll-call"
