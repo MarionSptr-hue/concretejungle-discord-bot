@@ -30,6 +30,7 @@ jobs:
         run: |
           git config --global user.name "Elphaba Bot"
           git config --global user.email "bot@github.com"
-          git add posted.json
+          echo "$(date)" > last_run.txt
+          git add posted.json last_run.txt
           git commit -m "Update posted history" || echo "No changes"
           git push
