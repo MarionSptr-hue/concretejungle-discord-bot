@@ -2,8 +2,11 @@ name: Elphaba Bot
 
 on:
   schedule:
-    - cron: "* * * * *"
+    - cron: "*/2 * * * *"
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   run-bot:
