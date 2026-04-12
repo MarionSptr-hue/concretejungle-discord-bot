@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import json
+from datetime import datetime
 
 WEBHOOK = os.getenv("DISCORD_WEBHOOK")
 url = "https://concretejungle.forumactif.com/f11-roll-call"
@@ -33,8 +34,32 @@ for topic in topics:
         continue
 
 for post in reversed(new_posts):
+    today = datetime.utcnow().strftime("%d %B %Y")
     data = {
-        "content": f"📢 @everyone\n\nUn nouveau visage apparaît dans les rues de Londres...\n\n📝 {post['title']}\n\nVenez lui souhaiter la bienvenue :\n{post['link']}"
+        "content": "📢 @everyone",
+        "embeds": [
+            {
+                "title": f"✨ {post['title']}",
+                "url": post["link"],
+                "description": "Un nouveau visage vient d'apparaître dans les rues de Londres...\nVenez accueillir ce nouveau membre et lui souhaiter la bienvenue ! 🎉",
+                "color": 8145087,
+                "fields": [
+                    {
+                        "name": "Serveur",
+                        "value": "Concrete Jungle",
+                        "inline": True
+                    },
+                    {
+                        "name": "Postée le",
+                        "value": today,
+                        "inline": True
+                    }
+                ],
+                "footer": {
+                    "text": "Concrete Jungle — Bot de bienvenue"
+                }
+            }
+        ]
     }
     requests.post(WEBHOOK, json=data)
     posted.append(post["link"])
