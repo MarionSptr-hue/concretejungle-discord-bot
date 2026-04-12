@@ -39,9 +39,9 @@ for post in reversed(new_posts):
         "content": "📢 @everyone",
         "embeds": [
             {
-                "title": f"✨ {post['title']}",
+                "title": f"👀 {post['title']}",
                 "url": post["link"],
-                "description": "Un nouveau visage vient d'apparaître dans les rues de Londres...\nVenez accueillir ce nouveau membre et lui souhaiter la bienvenue ! 🎉",
+                "description": "Un nouveau visage vient d'apparaître dans les rues de Londres...\nVenez lui souhaiter la bienvenue ! 🎉",
                 "color": 8145087,
                 "fields": [
                     {
