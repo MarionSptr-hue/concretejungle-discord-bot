@@ -2,8 +2,9 @@ name: Elphaba Bot
 
 on:
   schedule:
-    - cron: "*/2 * * * *"
+    - cron: "*/5 * * * *"
   workflow_dispatch:
+  push:
 
 permissions:
   contents: write
@@ -32,6 +33,10 @@ jobs:
       - name: Commit history
         run: |
           git config --global user.name "Elphaba Bot"
+          git config --global user.email "bot@github.com"
+          git add posted.json
+          git commit -m "Update posted history" || echo "No changes"
+          git pushame "Elphaba Bot"
           git config --global user.email "bot@github.com"
           git add posted.json
           git commit -m "Update posted history" || echo "No changes"
