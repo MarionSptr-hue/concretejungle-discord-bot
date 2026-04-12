@@ -9,6 +9,9 @@ jobs:
   run-bot:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -25,3 +28,11 @@ jobs:
         run: python bot.py
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Commit history
+        run: |
+          git config --global user.name "Elphaba Bot"
+          git config --global user.email "bot@github.com"
+          git add posted.json
+          git commit -m "Update posted history" || echo "No changes"
+          git push
