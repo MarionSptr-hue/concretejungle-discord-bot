@@ -42,7 +42,7 @@ for topic in topics:
 for post in reversed(new_posts):
 
     data = {
-        "content": f"📢 @everyone\n\nUn nouveau visage apparaît dans les rues de Londres...\n\n\n\nVenez lui souhaiter la bienvenue :\n{post['link']}"
+        "content": f"📢 @everyone\n\nUn nouveau visage apparaît dans la jungle...\n\n📝 {post['title']}\n\nVenez lui souhaiter la bienvenue :\n{post['link']}"
     }
 
     requests.post(WEBHOOK, json=data)
@@ -52,3 +52,4 @@ for post in reversed(new_posts):
 
 with open("posted.json", "w") as f:
     json.dump(posted, f)
+       
