@@ -1,3 +1,4 @@
+
 import requests
 from bs4 import BeautifulSoup
 import os
@@ -35,7 +36,8 @@ for topic in topics:
 
         link = "https://concretejungle.forumactif.com" + title_elem["href"]
 
-        author_elem = topic.select_one(".lastpost strong a")
+        # Créateur du sujet (colonne auteur)
+        author_elem = topic.select_one(".author a")
 
         if author_elem:
             author = author_elem.text.strip()
@@ -52,11 +54,10 @@ for topic in topics:
         continue
 
 
-# On envoie toutes les nouvelles fiches
 for post in reversed(new_posts):
 
     data = {
-        "content": f"📢 @everyone\n\nUn nouveau visage apparaît dans la jungle...\n\n👤 {post['author']}\n\nVenez lui souhaiter la bienvenue :\n{post['link']}"
+        "content": f"📢 @everyone\n\nUn nouveau visage apparaît dans les rues de Londres...\n\n👤 {post['author']}\n\nVenez lui souhaiter la bienvenue :\n{post['link']}"
     }
 
     requests.post(WEBHOOK, json=data)
@@ -64,6 +65,5 @@ for post in reversed(new_posts):
     posted.append(post["link"])
 
 
-# On sauvegarde l'historique
 with open("posted.json", "w") as f:
     json.dump(posted, f)
