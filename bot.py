@@ -1,59 +1,33 @@
-import discord
 import requests
 from bs4 import BeautifulSoup
-import asyncio
 import os
+import json
 
-TOKEN = os.getenv("DISCORD_TOKEN")
-CHANNEL_ID = 1492657635059830835
+WEBHOOK = os.getenv("DISCORD_WEBHOOK")
 
-last_post = None
+url = "https://concretejungle.forumactif.com/f11-roll-call"
 
-async def check_forum():
-    global last_post
-    await bot.wait_until_ready()
+r = requests.get(url)
+soup = BeautifulSoup(r.text, "html.parser")
 
-    while not bot.is_closed():
-        try:
-            url = "https://concretejungle.forumactif.com/f11-roll-call"
-            
-            r = requests.get(url)
-            soup = BeautifulSoup(r.text, "html.parser")
+topic = soup.select_one(".topictitle")
 
-            topic = soup.select_one(".topictitle")
+title = topic.text.strip()
+link = "https://concretejungle.forumactif.com" + topic["href"]
 
-            if topic:
-                title = topic.text.strip()
-                link = "https://concretejungle.forumactif.com" + topic["href"]
+try:
+    with open("last_post.txt", "r") as f:
+        last_post = f.read().strip()
+except:
+    last_post = ""
 
-                if last_post != link:
-                    last_post = link
-                    
-                    channel = bot.get_channel(CHANNEL_ID)
+if link != last_post:
 
-                    await channel.send(
-                        f"📢 @everyone\n\n"
-                        f"Un nouveau visage apparaît dans les rues de Londres...\n\n"
-                        f"👤 {title}\n\n"
-                        f"Venez lui souhaiter la bienvenue :\n"
-                        f"{link}"
-                    )
+    data = {
+        "content": f"📢 @everyone\n\nUn nouveau visage apparaît dans la jungle...\n\n👤 {title}\n\nVenez lui souhaiter la bienvenue :\n{link}"
+    }
 
-        except Exception as e:
-            print("Erreur :", e)
+    requests.post(WEBHOOK, json=data)
 
-        await asyncio.sleep(120)
-
-
-intents = discord.Intents.default()
-intents.message_content = True
-
-bot = discord.Client(intents=intents)
-
-@bot.event
-async def on_ready():
-    print(f"Bot connecté en tant que {bot.user}")
-
-bot.loop.create_task(check_forum())
-
-bot.run(TOKEN)
+    with open("last_post.txt", "w") as f:
+        f.write(link)
