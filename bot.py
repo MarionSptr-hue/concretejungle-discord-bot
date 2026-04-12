@@ -36,27 +36,30 @@ for topic in topics:
 for post in reversed(new_posts):
     today = datetime.utcnow().strftime("%d %B %Y")
     data = {
-        "content": "📢 @everyone",
+        "content": "<@everyone>",
         "embeds": [
             {
-                "title": f"✨ {post['title']}",
+                "author": {
+                    "name": "— nouvelle fiche —"
+                },
+                "title": post["title"],
                 "url": post["link"],
-                "description": "Un nouveau visage vient d'apparaître dans les rues de Londres...\nVenez lui souhaiter la bienvenue ! 🎉",
-                "color": 8145087,
+                "description": "Quelqu'un vient de poser le pied dans les rues de Londres.\nAllez lui dire bonjour avant que le brouillard ne l'avale.",
+                "color": 13281646,
                 "fields": [
                     {
-                        "name": "Serveur",
+                        "name": "SERVEUR",
                         "value": "Concrete Jungle",
                         "inline": True
                     },
                     {
-                        "name": "Postée le",
+                        "name": "ARRIVÉE",
                         "value": today,
                         "inline": True
                     }
                 ],
                 "footer": {
-                    "text": "Concrete Jungle — Bot de bienvenue"
+                    "text": "Elphaba · Concrete Jungle"
                 }
             }
         ]
