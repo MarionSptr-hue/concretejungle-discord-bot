@@ -25,23 +25,13 @@ except:
 new_posts = []
 
 for topic in topics:
-
     try:
         title = topic.text.strip()
         link = "https://concretejungle.forumactif.com" + topic["href"]
 
-        # Trouver auteur
-        parent = topic.find_parent("li")
-        author_elem = parent.select_one(".author a") if parent else None
-
-        if author_elem:
-            author = author_elem.text.strip()
-        else:
-            author = title
-
         if link not in posted:
             new_posts.append({
-                "author": author,
+                "title": title,
                 "link": link
             })
 
@@ -52,7 +42,7 @@ for topic in topics:
 for post in reversed(new_posts):
 
     data = {
-        "content": f"📢 @everyone\n\nUn nouveau visage apparaît dans la jungle...\n\n👤 {post['author']}\n\nVenez lui souhaiter la bienvenue :\n{post['link']}"
+        "content": f"📢 @everyone\n\nUn nouveau visage apparaît dans la jungle...\n\n📝 {post['title']}\n\nVenez lui souhaiter la bienvenue :\n{post['link']}"
     }
 
     requests.post(WEBHOOK, json=data)
